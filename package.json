@@ -1,0 +1,22 @@
+{
+  "name": "groupomania-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.2",
+    "mysql2": "^2.3.3"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.17",
+    "nodemon": "^2.0.15",
+    "prisma": "^3.9.2",
+    "ts-node": "^10.5.0",
+    "typescript": "^4.5.5"
+  }
+}
