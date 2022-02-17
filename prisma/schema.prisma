@@ -1,0 +1,77 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String    @id @default(uuid())
+  email       String    @unique
+  password    String
+  lastname    String
+  firstname   String
+  position    String?
+  picture     String?
+  isModerator Boolean   @default(false)
+  posts       Post[]
+  comments    Comment[]
+  likes       Like[]
+  followers   Follow[]  @relation("following")
+  following   Follow[]  @relation("follower")
+  reports     Report[]
+}
+
+model Post {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  content   String
+  media     String?
+  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  String
+  comments  Comment[]
+  likes     Like[]
+  reports   Report[]
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  content   String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String
+}
+
+model Like {
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId String
+
+  @@id([userId, postId])
+}
+
+model Follow {
+  follower    User   @relation(fields: [followerId], references: [id], onDelete: Cascade, name: "follower")
+  followerId  String
+  following   User   @relation(fields: [followingId], references: [id], onDelete: Cascade, name: "following")
+  followingId String
+
+  @@id([followerId, followingId])
+}
+
+model Report {
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId String
+
+  @@id([userId, postId])
+}
