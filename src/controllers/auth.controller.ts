@@ -1,10 +1,10 @@
-import bcrypt from 'bcrypt'
 import { NextFunction, Request, Response } from 'express'
 import createError from 'http-errors'
 
 import { PrismaClient, User } from '@prisma/client'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime'
 
+import { hashPassword, verifyPassword } from '../utils/password'
 import { createToken } from '../utils/token'
 
 const prisma = new PrismaClient()
@@ -13,7 +13,7 @@ export const signup = async (req: Request, res: Response, next: NextFunction) =>
   const { lastname, firstname, email, password }: User = req.body
 
   try {
-    const hashedPassword = await bcrypt.hash(password, 10)
+    const hashedPassword = await hashPassword(password)
 
     const user = await prisma.user.create({
       data: {
@@ -47,8 +47,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
 
     if (!user) throw new createError.Unauthorized("Cet utilisateur n'existe pas")
 
-    const isValidPassword = await bcrypt.compare(password, user.password)
-    if (!isValidPassword) throw new createError.Unauthorized('Le mot de passe est erroné')
+    await verifyPassword(password, user.password)
 
     const accessToken = createToken(user)
 
