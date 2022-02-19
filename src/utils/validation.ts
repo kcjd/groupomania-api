@@ -26,3 +26,7 @@ export const loginSchema = yup.object({
 export const postSchema = yup.object({
   content: yup.string().trim().max(255).required()
 })
+
+export const commentSchema = yup.object({
+  content: yup.string().trim().max(255).required()
+})
