@@ -22,3 +22,7 @@ export const loginSchema = yup.object({
   password: yup.string().required(),
   email: yup.string().required()
 })
+
+export const postSchema = yup.object({
+  content: yup.string().trim().max(255).required()
+})
