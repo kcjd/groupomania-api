@@ -1,9 +1,9 @@
 import { Router } from 'express'
 
-import { addReport } from '../controllers/reports.controller'
+import { reportPost } from '../controllers/reports.controller'
 
 const router = Router({ mergeParams: true })
 
-router.post('/reports', addReport)
+router.post('/', reportPost)
 
 export default router

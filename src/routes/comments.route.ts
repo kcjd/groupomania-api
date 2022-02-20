@@ -6,8 +6,8 @@ import { commentSchema } from '../utils/validation'
 
 const router = Router({ mergeParams: true })
 
-router.post('/comments', validate(commentSchema), addComment)
-router.patch('/comments/:commentId', validate(commentSchema), editComment)
-router.delete('/comments/:commentId', deleteComment)
+router.post('/', validate(commentSchema), addComment)
+router.patch('/:commentId', validate(commentSchema), editComment)
+router.delete('/:commentId', deleteComment)
 
 export default router

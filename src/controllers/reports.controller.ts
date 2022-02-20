@@ -4,7 +4,7 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-export const addReport = async (req: Request, res: Response, next: NextFunction) => {
+export const reportPost = async (req: Request, res: Response, next: NextFunction) => {
   const { postId } = req.params
   const { id: userId } = req.currentUser
 

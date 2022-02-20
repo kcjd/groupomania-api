@@ -1,10 +1,10 @@
 import { Router } from 'express'
 
-import { addLike, deleteLike } from '../controllers/likes.controller'
+import { likePost, unlikePost } from '../controllers/likes.controller'
 
 const router = Router({ mergeParams: true })
 
-router.post('/likes', addLike)
-router.delete('/likes', deleteLike)
+router.post('/', likePost)
+router.delete('/', unlikePost)
 
 export default router

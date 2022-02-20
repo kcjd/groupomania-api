@@ -5,7 +5,7 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-export const addLike = async (req: Request, res: Response, next: NextFunction) => {
+export const likePost = async (req: Request, res: Response, next: NextFunction) => {
   const { postId } = req.params
   const { id: userId } = req.currentUser
 
@@ -23,7 +23,7 @@ export const addLike = async (req: Request, res: Response, next: NextFunction) =
   }
 }
 
-export const deleteLike = async (req: Request, res: Response, next: NextFunction) => {
+export const unlikePost = async (req: Request, res: Response, next: NextFunction) => {
   const { postId } = req.params
   const { id: userId } = req.currentUser
 

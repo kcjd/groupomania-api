@@ -14,8 +14,8 @@ router.post('/', validate(postSchema), addPost)
 router.patch('/:postId', validate(postSchema), editPost)
 router.delete('/:postId', deletePost)
 
-router.use('/:postId', commentsRoute)
-router.use('/:postId', likesRoute)
-router.use('/:postId', reportsRoute)
+router.use('/:postId/comments', commentsRoute)
+router.use('/:postId/likes', likesRoute)
+router.use('/:postId/reports', reportsRoute)
 
 export default router
