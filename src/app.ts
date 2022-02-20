@@ -7,6 +7,7 @@ import auth from './middleware/auth'
 import handleErrors from './middleware/handleErrors'
 import authRoute from './routes/auth.route'
 import postsRoute from './routes/posts.route'
+import usersRoute from './routes/users.route'
 
 const app: Application = express()
 
@@ -17,6 +18,7 @@ app.use(express.json())
 // Routes
 app.use('/auth', authRoute)
 app.use('/posts', auth, postsRoute)
+app.use('/users', auth, usersRoute)
 
 app.use(handleErrors)
 

@@ -30,3 +30,14 @@ export const postSchema = yup.object({
 export const commentSchema = yup.object({
   content: yup.string().trim().max(255).required()
 })
+
+export const userSchema = yup.object({
+  lastname: yup.string().trim().min(2).max(50),
+  firstname: yup.string().trim().min(2).max(50),
+  position: yup.string().trim().min(2).max(50)
+})
+
+export const passwordSchema = yup.object({
+  password: yup.string().required(),
+  newPassword: yup.string().min(8).max(25).required()
+})
