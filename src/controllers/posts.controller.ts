@@ -8,7 +8,12 @@ const prisma = new PrismaClient()
 export const getPosts = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const posts = await prisma.post.findMany({
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
+      include: {
+        comments: true,
+        likes: true,
+        reports: true
+      }
     })
 
     res.status(200).json(posts)
@@ -19,7 +24,7 @@ export const getPosts = async (req: Request, res: Response, next: NextFunction) 
 
 export const addPost = async (req: Request, res: Response, next: NextFunction) => {
   const { content }: Post = req.body
-  const userId = req.currentUser.id
+  const { id: userId } = req.currentUser
 
   try {
     const post = await prisma.post.create({
@@ -36,7 +41,7 @@ export const addPost = async (req: Request, res: Response, next: NextFunction) =
 }
 
 export const editPost = async (req: Request, res: Response, next: NextFunction) => {
-  const postId = req.params.postId
+  const { postId } = req.params
   const { content }: Post = req.body
 
   try {
@@ -51,14 +56,14 @@ export const editPost = async (req: Request, res: Response, next: NextFunction) 
       data: { content }
     })
 
-    res.status(201).json(editedPost)
+    res.status(200).json(editedPost)
   } catch (err) {
     next(err)
   }
 }
 
 export const deletePost = async (req: Request, res: Response, next: NextFunction) => {
-  const postId = req.params.postId
+  const { postId } = req.params
 
   try {
     const post = await prisma.post.findUnique({
