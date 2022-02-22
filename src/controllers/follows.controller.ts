@@ -1,21 +1,13 @@
 import { NextFunction, Request, Response } from 'express'
-import createError from 'http-errors'
 
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import * as followsService from '../services/follows.service'
 
 export const followUser = async (req: Request, res: Response, next: NextFunction) => {
   const { userId: followingId } = req.params
   const { id: followerId } = req.currentUser
 
   try {
-    const follow = await prisma.follow.create({
-      data: {
-        followerId,
-        followingId
-      }
-    })
+    const follow = await followsService.followUser(followerId, followingId)
 
     res.status(201).json(follow)
   } catch (err) {
@@ -28,15 +20,7 @@ export const unfollowUser = async (req: Request, res: Response, next: NextFuncti
   const { id: followerId } = req.currentUser
 
   try {
-    const follow = await prisma.follow.findUnique({
-      where: { followerId_followingId: { followerId, followingId } }
-    })
-
-    if (!follow) throw new createError.NotFound('Vous ne suivez pas cet utilisateur')
-
-    await prisma.follow.delete({
-      where: { followerId_followingId: { followerId, followingId } }
-    })
+    await followsService.unfollowUser(followerId, followingId)
 
     res.status(200).json('Vous ne suivez plus cette personne')
   } catch (err) {
