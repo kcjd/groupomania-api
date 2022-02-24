@@ -36,7 +36,7 @@ export const deleteComment = async (req: Request, res: Response, next: NextFunct
   try {
     await commentsService.deleteComment(commentId)
 
-    res.status(200).json({ message: 'Commentaire supprimé' })
+    res.status(200).json('Commentaire supprimé')
   } catch (err) {
     next(err)
   }

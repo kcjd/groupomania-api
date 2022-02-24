@@ -1,3 +1,5 @@
+import { Express } from 'express'
+import { unlink } from 'fs/promises'
 import createError from 'http-errors'
 
 import { PrismaClient } from '@prisma/client'
@@ -33,34 +35,65 @@ export const getPosts = () => {
   })
 }
 
-export const createPost = ({ content }: PostData, authorId: string) => {
+export const createPost = ({ content }: PostData, file: Express.Multer.File | undefined, authorId: string) => {
   return prisma.post.create({
     data: {
       content,
-      authorId
+      authorId,
+      ...(file && { media: `images/posts/${file.filename}` })
     }
   })
 }
 
-export const editPost = async (postId: string, { content }: PostData) => {
-  await checkPost(postId)
+export const editPost = async (postId: string, { content }: PostData, file: Express.Multer.File | undefined) => {
+  const post = await checkPost(postId)
 
-  return prisma.post.update({
+  const updatedPost = await prisma.post.update({
     where: {
       id: postId
     },
     data: {
-      content
+      content,
+      ...(file && { media: `images/posts/${file.filename}` })
     }
   })
+
+  if (file && post.media) {
+    await unlink(`public/${post.media}`)
+  }
+
+  return updatedPost
+}
+
+export const deletePostMedia = async (postId: string) => {
+  const post = await checkPost(postId)
+
+  if (!post.media) {
+    throw new createError.NotFound("Cette publication ne contient pas d'image")
+  }
+
+  await prisma.post.update({
+    where: {
+      id: postId
+    },
+    data: {
+      media: null
+    }
+  })
+
+  await unlink(`public/${post.media}`)
 }
 
 export const deletePost = async (postId: string) => {
-  await checkPost(postId)
+  const post = await checkPost(postId)
 
-  return prisma.post.delete({
+  await prisma.post.delete({
     where: {
       id: postId
     }
   })
+
+  if (post.media) {
+    await unlink(`public/${post.media}`)
+  }
 }

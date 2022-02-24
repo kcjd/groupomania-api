@@ -2,6 +2,7 @@ import 'dotenv/config'
 
 import cors from 'cors'
 import express, { Application } from 'express'
+import path from 'path'
 
 import auth from './middleware/auth'
 import handleErrors from './middleware/handleErrors'
@@ -14,6 +15,9 @@ const app: Application = express()
 // Middleware
 app.use(cors())
 app.use(express.json())
+
+// Static
+app.use(express.static(path.join(__dirname, '../public')))
 
 // Routes
 app.use('/auth', authRoute)

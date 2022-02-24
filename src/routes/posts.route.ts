@@ -1,6 +1,9 @@
 import { Router } from 'express'
 
-import { addPost, deletePost, editPost, getPosts } from '../controllers/posts.controller'
+import {
+  addPost, deletePost, deletePostMedia, editPost, getPosts
+} from '../controllers/posts.controller'
+import upload from '../middleware/upload'
 import validate from '../middleware/validate'
 import { postSchema } from '../utils/validation'
 import commentsRoute from './comments.route'
@@ -10,8 +13,9 @@ import reportsRoute from './reports.route'
 const router = Router()
 
 router.get('/', getPosts)
-router.post('/', validate(postSchema), addPost)
-router.patch('/:postId', validate(postSchema), editPost)
+router.post('/', upload('posts').single('media'), validate(postSchema), addPost)
+router.patch('/:postId', upload('posts').single('media'), validate(postSchema), editPost)
+router.delete('/:postId/media', deletePostMedia)
 router.delete('/:postId', deletePost)
 
 router.use('/:postId/comments', commentsRoute)
