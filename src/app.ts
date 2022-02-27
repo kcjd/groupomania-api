@@ -2,6 +2,8 @@ import 'dotenv/config'
 
 import cors from 'cors'
 import express, { Application } from 'express'
+import { rateLimit } from 'express-rate-limit'
+import helmet from 'helmet'
 import path from 'path'
 
 import auth from './middleware/auth'
@@ -12,14 +14,25 @@ import usersRoute from './routes/users.route'
 
 const app: Application = express()
 
-// Middleware
 app.use(cors())
 app.use(express.json())
 
-// Static
+app.use(
+  helmet({
+    crossOriginResourcePolicy: false
+  })
+)
+
+app.use(
+  rateLimit({
+    windowMs: 60 * 1000,
+    max: 100,
+    message: 'Trop de requêtes, veuillez réessayer plus tard'
+  })
+)
+
 app.use(express.static(path.join(__dirname, '../public')))
 
-// Routes
 app.use('/auth', authRoute)
 
 app.use(auth)
