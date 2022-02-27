@@ -21,8 +21,11 @@ app.use(express.static(path.join(__dirname, '../public')))
 
 // Routes
 app.use('/auth', authRoute)
-app.use('/posts', auth, postsRoute)
-app.use('/users', auth, usersRoute)
+
+app.use(auth)
+
+app.use('/posts', postsRoute)
+app.use('/users', usersRoute)
 
 app.use(handleErrors)
 

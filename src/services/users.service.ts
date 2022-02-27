@@ -9,7 +9,7 @@ import { PasswordData, ProfileData } from '../utils/validation'
 
 const prisma = new PrismaClient()
 
-export const checkUser = async (userId: string) => {
+export const getUser = async (userId: string) => {
   const user = await prisma.user.findUnique({
     where: {
       id: userId
@@ -36,7 +36,7 @@ export const editProfile = async (
   { lastname, firstname, position }: ProfileData,
   file: Express.Multer.File | undefined
 ) => {
-  const user = await checkUser(userId)
+  const user = await getUser(userId)
 
   const updatedUser = await prisma.user.update({
     where: {
@@ -58,7 +58,7 @@ export const editProfile = async (
 }
 
 export const editPassword = async (userId: string, { password, newPassword }: PasswordData) => {
-  const user = await checkUser(userId)
+  const user = await getUser(userId)
 
   await verifyPassword(password, user.password)
 
@@ -75,7 +75,7 @@ export const editPassword = async (userId: string, { password, newPassword }: Pa
 }
 
 export const deleteUserPicture = async (userId: string) => {
-  const user = await checkUser(userId)
+  const user = await getUser(userId)
 
   if (!user.picture) {
     throw new createError.NotFound('Cet utilisateur ne possède pas de photo de profil')
@@ -94,7 +94,7 @@ export const deleteUserPicture = async (userId: string) => {
 }
 
 export const deleteUser = async (userId: string) => {
-  const user = await checkUser(userId)
+  const user = await getUser(userId)
 
   await prisma.user.delete({
     where: {

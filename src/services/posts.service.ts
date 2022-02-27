@@ -8,7 +8,7 @@ import { PostData } from '../utils/validation'
 
 const prisma = new PrismaClient()
 
-export const checkPost = async (postId: string) => {
+export const getPost = async (postId: string) => {
   const post = await prisma.post.findUnique({
     where: {
       id: postId
@@ -46,7 +46,7 @@ export const createPost = ({ content }: PostData, file: Express.Multer.File | un
 }
 
 export const editPost = async (postId: string, { content }: PostData, file: Express.Multer.File | undefined) => {
-  const post = await checkPost(postId)
+  const post = await getPost(postId)
 
   const updatedPost = await prisma.post.update({
     where: {
@@ -66,7 +66,7 @@ export const editPost = async (postId: string, { content }: PostData, file: Expr
 }
 
 export const deletePostMedia = async (postId: string) => {
-  const post = await checkPost(postId)
+  const post = await getPost(postId)
 
   if (!post.media) {
     throw new createError.NotFound("Cette publication ne contient pas d'image")
@@ -85,7 +85,7 @@ export const deletePostMedia = async (postId: string) => {
 }
 
 export const deletePost = async (postId: string) => {
-  const post = await checkPost(postId)
+  const post = await getPost(postId)
 
   await prisma.post.delete({
     where: {

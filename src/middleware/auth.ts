@@ -6,13 +6,16 @@ import { verifyToken } from '../utils/token'
 export default (req: Request, res: Response, next: NextFunction) => {
   try {
     const authHeader = req.headers.authorization
+    const token = authHeader && authHeader.split(' ')[1]
 
-    const decodedToken = verifyToken(authHeader ?? '')
+    if (!token) {
+      return next(new createError.Unauthorized('Authentification requise'))
+    }
 
-    req.currentUser = decodedToken
+    req.user = verifyToken(token)
 
     next()
   } catch (err) {
-    next(new createError.Unauthorized())
+    next(err)
   }
 }

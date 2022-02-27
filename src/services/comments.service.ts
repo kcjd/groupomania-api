@@ -6,7 +6,7 @@ import { CommentData } from '../utils/validation'
 
 const prisma = new PrismaClient()
 
-export const checkComment = async (commentId: string) => {
+export const getComment = async (commentId: string) => {
   const comment = await prisma.comment.findUnique({
     where: {
       id: commentId
@@ -31,7 +31,7 @@ export const createComment = ({ content }: CommentData, postId: string, authorId
 }
 
 export const editComment = async (commentId: string, { content }: CommentData) => {
-  await checkComment(commentId)
+  await getComment(commentId)
 
   return prisma.comment.update({
     where: {
@@ -44,7 +44,7 @@ export const editComment = async (commentId: string, { content }: CommentData) =
 }
 
 export const deleteComment = async (commentId: string) => {
-  await checkComment(commentId)
+  await getComment(commentId)
 
   return prisma.comment.delete({
     where: {

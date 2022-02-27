@@ -4,12 +4,12 @@ import * as commentsService from '../services/comments.service'
 import { CommentData } from '../utils/validation'
 
 export const addComment = async (req: Request, res: Response, next: NextFunction) => {
+  const { user } = req
   const { postId } = req.params
-  const { id: userId } = req.currentUser
   const data: CommentData = req.body
 
   try {
-    const comment = await commentsService.createComment(data, postId, userId)
+    const comment = await commentsService.createComment(data, postId, user.id)
 
     res.status(201).json(comment)
   } catch (err) {

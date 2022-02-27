@@ -14,12 +14,12 @@ export const getPosts = async (req: Request, res: Response, next: NextFunction) 
 }
 
 export const addPost = async (req: Request, res: Response, next: NextFunction) => {
-  const { id: userId } = req.currentUser
+  const { user } = req
   const data: PostData = req.body
   const file = req.file
 
   try {
-    const post = await postsService.createPost(data, file, userId)
+    const post = await postsService.createPost(data, file, user.id)
 
     res.status(201).json(post)
   } catch (err) {

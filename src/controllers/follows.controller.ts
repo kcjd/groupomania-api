@@ -3,11 +3,11 @@ import { NextFunction, Request, Response } from 'express'
 import * as followsService from '../services/follows.service'
 
 export const followUser = async (req: Request, res: Response, next: NextFunction) => {
-  const { userId: followingId } = req.params
-  const { id: followerId } = req.currentUser
+  const { user } = req
+  const { userId } = req.params
 
   try {
-    const follow = await followsService.followUser(followerId, followingId)
+    const follow = await followsService.followUser(user.id, userId)
 
     res.status(201).json(follow)
   } catch (err) {
@@ -16,11 +16,11 @@ export const followUser = async (req: Request, res: Response, next: NextFunction
 }
 
 export const unfollowUser = async (req: Request, res: Response, next: NextFunction) => {
-  const { userId: followingId } = req.params
-  const { id: followerId } = req.currentUser
+  const { user } = req
+  const { userId } = req.params
 
   try {
-    await followsService.unfollowUser(followerId, followingId)
+    await followsService.unfollowUser(user.id, userId)
 
     res.status(200).json('Vous ne suivez plus cette personne')
   } catch (err) {
