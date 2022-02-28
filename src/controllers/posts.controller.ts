@@ -33,9 +33,21 @@ export const editPost = async (req: Request, res: Response, next: NextFunction) 
   const file = req.file
 
   try {
-    const post = await postsService.editPost(postId, data, file)
+    const post = await postsService.editPost(Number(postId), data, file)
 
     res.status(200).json(post)
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const hidePost = async (req: Request, res: Response, next: NextFunction) => {
+  const { postId } = req.params
+
+  try {
+    await postsService.hidePost(Number(postId))
+
+    res.status(200).json('Publication masquée')
   } catch (err) {
     next(err)
   }
@@ -45,7 +57,7 @@ export const deletePostMedia = async (req: Request, res: Response, next: NextFun
   const { postId } = req.params
 
   try {
-    await postsService.deletePostMedia(postId)
+    await postsService.deletePostMedia(Number(postId))
 
     res.status(200).json('Image supprimée')
   } catch (err) {
@@ -57,7 +69,7 @@ export const deletePost = async (req: Request, res: Response, next: NextFunction
   const { postId } = req.params
 
   try {
-    await postsService.deletePost(postId)
+    await postsService.deletePost(Number(postId))
 
     res.status(200).json('Publication supprimée')
   } catch (err) {

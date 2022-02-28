@@ -4,7 +4,7 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-export const followUser = async (followerId: string, followingId: string) => {
+export const followUser = async (followerId: number, followingId: number) => {
   const existingFollow = await prisma.follow.findUnique({
     where: {
       followerId_followingId: {
@@ -26,7 +26,7 @@ export const followUser = async (followerId: string, followingId: string) => {
   })
 }
 
-export const unfollowUser = async (followerId: string, followingId: string) => {
+export const unfollowUser = async (followerId: number, followingId: number) => {
   const existingFollow = await prisma.follow.findUnique({
     where: {
       followerId_followingId: {

@@ -4,7 +4,7 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-export const likePost = async (postId: string, userId: string) => {
+export const likePost = async (postId: number, userId: number) => {
   const existingLike = await prisma.like.findUnique({
     where: {
       userId_postId: {
@@ -26,7 +26,7 @@ export const likePost = async (postId: string, userId: string) => {
   })
 }
 
-export const unlikePost = async (postId: string, userId: string) => {
+export const unlikePost = async (postId: number, userId: number) => {
   const existingLike = await prisma.like.findUnique({
     where: {
       userId_postId: {

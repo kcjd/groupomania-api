@@ -7,7 +7,7 @@ export const reportPost = async (req: Request, res: Response, next: NextFunction
   const { postId } = req.params
 
   try {
-    const report = await reportsService.reportPost(postId, user.id)
+    const report = await reportsService.reportPost(Number(postId), user.id)
 
     res.status(201).json(report)
   } catch (err) {

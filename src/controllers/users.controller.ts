@@ -19,7 +19,7 @@ export const editProfile = async (req: Request, res: Response, next: NextFunctio
   const file = req.file
 
   try {
-    const user = await usersService.editProfile(userId, data, file)
+    const user = await usersService.editProfile(Number(userId), data, file)
 
     res.status(200).json(user)
   } catch (err) {
@@ -32,7 +32,7 @@ export const editPassword = async (req: Request, res: Response, next: NextFuncti
   const data: PasswordData = req.body
 
   try {
-    await usersService.editPassword(userId, data)
+    await usersService.editPassword(Number(userId), data)
 
     res.status(200).json('Mot de passe modifié')
   } catch (err) {
@@ -44,7 +44,7 @@ export const deleteUserPicture = async (req: Request, res: Response, next: NextF
   const { userId } = req.params
 
   try {
-    await usersService.deleteUserPicture(userId)
+    await usersService.deleteUserPicture(Number(userId))
 
     res.status(200).json('Photo de profil supprimée')
   } catch (err) {
@@ -56,7 +56,7 @@ export const deleteUser = async (req: Request, res: Response, next: NextFunction
   const userId = req.params.userId
 
   try {
-    await usersService.deleteUser(userId)
+    await usersService.deleteUser(Number(userId))
 
     res.status(200).json('Utilisateur supprimé')
   } catch (err) {

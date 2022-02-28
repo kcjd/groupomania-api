@@ -9,7 +9,7 @@ import { PasswordData, ProfileData } from '../utils/validation'
 
 const prisma = new PrismaClient()
 
-export const getUser = async (userId: string) => {
+export const getUser = async (userId: number) => {
   const user = await prisma.user.findUnique({
     where: {
       id: userId
@@ -32,7 +32,7 @@ export const getUsers = () => {
 }
 
 export const editProfile = async (
-  userId: string,
+  userId: number,
   { lastname, firstname, position }: ProfileData,
   file: Express.Multer.File | undefined
 ) => {
@@ -57,7 +57,7 @@ export const editProfile = async (
   return updatedUser
 }
 
-export const editPassword = async (userId: string, { password, newPassword }: PasswordData) => {
+export const editPassword = async (userId: number, { password, newPassword }: PasswordData) => {
   const user = await getUser(userId)
 
   await verifyPassword(password, user.password)
@@ -74,7 +74,7 @@ export const editPassword = async (userId: string, { password, newPassword }: Pa
   })
 }
 
-export const deleteUserPicture = async (userId: string) => {
+export const deleteUserPicture = async (userId: number) => {
   const user = await getUser(userId)
 
   if (!user.picture) {
@@ -93,7 +93,7 @@ export const deleteUserPicture = async (userId: string) => {
   await unlink(`public/${user.picture}`)
 }
 
-export const deleteUser = async (userId: string) => {
+export const deleteUser = async (userId: number) => {
   const user = await getUser(userId)
 
   await prisma.user.delete({

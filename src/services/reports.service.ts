@@ -4,7 +4,7 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-export const reportPost = async (postId: string, userId: string) => {
+export const reportPost = async (postId: number, userId: number) => {
   const existingReport = await prisma.report.findUnique({
     where: {
       userId_postId: {

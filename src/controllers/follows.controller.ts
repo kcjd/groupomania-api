@@ -7,7 +7,7 @@ export const followUser = async (req: Request, res: Response, next: NextFunction
   const { userId } = req.params
 
   try {
-    const follow = await followsService.followUser(user.id, userId)
+    const follow = await followsService.followUser(user.id, Number(userId))
 
     res.status(201).json(follow)
   } catch (err) {
@@ -20,9 +20,9 @@ export const unfollowUser = async (req: Request, res: Response, next: NextFuncti
   const { userId } = req.params
 
   try {
-    await followsService.unfollowUser(user.id, userId)
+    const unfollow = await followsService.unfollowUser(user.id, Number(userId))
 
-    res.status(200).json('Vous ne suivez plus cette personne')
+    res.status(200).json(unfollow)
   } catch (err) {
     next(err)
   }

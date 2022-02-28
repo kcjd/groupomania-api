@@ -9,7 +9,7 @@ export const addComment = async (req: Request, res: Response, next: NextFunction
   const data: CommentData = req.body
 
   try {
-    const comment = await commentsService.createComment(data, postId, user.id)
+    const comment = await commentsService.createComment(data, Number(postId), user.id)
 
     res.status(201).json(comment)
   } catch (err) {
@@ -22,9 +22,21 @@ export const editComment = async (req: Request, res: Response, next: NextFunctio
   const data: CommentData = req.body
 
   try {
-    const comment = await commentsService.editComment(commentId, data)
+    const comment = await commentsService.editComment(Number(commentId), data)
 
     res.status(200).json(comment)
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const hideComment = async (req: Request, res: Response, next: NextFunction) => {
+  const { commentId } = req.params
+
+  try {
+    await commentsService.hideComment(Number(commentId))
+
+    res.status(200).json('Commentaire masqué')
   } catch (err) {
     next(err)
   }
@@ -34,7 +46,7 @@ export const deleteComment = async (req: Request, res: Response, next: NextFunct
   const { commentId } = req.params
 
   try {
-    await commentsService.deleteComment(commentId)
+    await commentsService.deleteComment(Number(commentId))
 
     res.status(200).json('Commentaire supprimé')
   } catch (err) {

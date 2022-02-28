@@ -8,7 +8,7 @@ import { PostData } from '../utils/validation'
 
 const prisma = new PrismaClient()
 
-export const getPost = async (postId: string) => {
+const getPost = async (postId: number) => {
   const post = await prisma.post.findUnique({
     where: {
       id: postId
@@ -24,18 +24,22 @@ export const getPost = async (postId: string) => {
 
 export const getPosts = () => {
   return prisma.post.findMany({
-    orderBy: {
-      createdAt: 'desc'
+    where: {
+      published: true
     },
     include: {
-      comments: true,
+      comments: {
+        where: {
+          published: true
+        }
+      },
       likes: true,
       reports: true
     }
   })
 }
 
-export const createPost = ({ content }: PostData, file: Express.Multer.File | undefined, authorId: string) => {
+export const createPost = ({ content }: PostData, file: Express.Multer.File | undefined, authorId: number) => {
   return prisma.post.create({
     data: {
       content,
@@ -45,7 +49,7 @@ export const createPost = ({ content }: PostData, file: Express.Multer.File | un
   })
 }
 
-export const editPost = async (postId: string, { content }: PostData, file: Express.Multer.File | undefined) => {
+export const editPost = async (postId: number, { content }: PostData, file: Express.Multer.File | undefined) => {
   const post = await getPost(postId)
 
   const updatedPost = await prisma.post.update({
@@ -65,7 +69,18 @@ export const editPost = async (postId: string, { content }: PostData, file: Expr
   return updatedPost
 }
 
-export const deletePostMedia = async (postId: string) => {
+export const hidePost = (postId: number) => {
+  return prisma.post.update({
+    where: {
+      id: postId
+    },
+    data: {
+      published: false
+    }
+  })
+}
+
+export const deletePostMedia = async (postId: number) => {
   const post = await getPost(postId)
 
   if (!post.media) {
@@ -84,7 +99,7 @@ export const deletePostMedia = async (postId: string) => {
   await unlink(`public/${post.media}`)
 }
 
-export const deletePost = async (postId: string) => {
+export const deletePost = async (postId: number) => {
   const post = await getPost(postId)
 
   await prisma.post.delete({

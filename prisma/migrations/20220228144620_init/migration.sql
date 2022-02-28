@@ -1,13 +1,13 @@
 -- CreateTable
 CREATE TABLE `User` (
-    `id` VARCHAR(191) NOT NULL,
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
     `email` VARCHAR(191) NOT NULL,
     `password` VARCHAR(191) NOT NULL,
     `lastname` VARCHAR(191) NOT NULL,
     `firstname` VARCHAR(191) NOT NULL,
     `position` VARCHAR(191) NULL,
     `picture` VARCHAR(191) NULL,
-    `isModerator` BOOLEAN NOT NULL DEFAULT false,
+    `role` ENUM('USER', 'MODERATOR') NOT NULL DEFAULT 'USER',
 
     UNIQUE INDEX `User_email_key`(`email`),
     PRIMARY KEY (`id`)
@@ -15,46 +15,48 @@ CREATE TABLE `User` (
 
 -- CreateTable
 CREATE TABLE `Post` (
-    `id` VARCHAR(191) NOT NULL,
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `content` VARCHAR(191) NOT NULL,
     `media` VARCHAR(191) NULL,
-    `authorId` VARCHAR(191) NOT NULL,
+    `published` BOOLEAN NOT NULL DEFAULT true,
+    `authorId` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `Comment` (
-    `id` VARCHAR(191) NOT NULL,
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `content` VARCHAR(191) NOT NULL,
-    `authorId` VARCHAR(191) NOT NULL,
-    `postId` VARCHAR(191) NOT NULL,
+    `published` BOOLEAN NOT NULL DEFAULT true,
+    `authorId` INTEGER NOT NULL,
+    `postId` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `Like` (
-    `userId` VARCHAR(191) NOT NULL,
-    `postId` VARCHAR(191) NOT NULL,
+    `userId` INTEGER NOT NULL,
+    `postId` INTEGER NOT NULL,
 
     PRIMARY KEY (`userId`, `postId`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `Follow` (
-    `followerId` VARCHAR(191) NOT NULL,
-    `followingId` VARCHAR(191) NOT NULL,
+    `followerId` INTEGER NOT NULL,
+    `followingId` INTEGER NOT NULL,
 
     PRIMARY KEY (`followerId`, `followingId`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `Report` (
-    `userId` VARCHAR(191) NOT NULL,
-    `postId` VARCHAR(191) NOT NULL,
+    `userId` INTEGER NOT NULL,
+    `postId` INTEGER NOT NULL,
 
     PRIMARY KEY (`userId`, `postId`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
