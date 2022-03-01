@@ -39,7 +39,9 @@ export const getPosts = () => {
   })
 }
 
-export const createPost = ({ content }: PostData, file: Express.Multer.File | undefined, authorId: number) => {
+export const createPost = (data: PostData, file: Express.Multer.File | undefined, authorId: number) => {
+  const { content } = data
+
   return prisma.post.create({
     data: {
       content,
@@ -49,7 +51,9 @@ export const createPost = ({ content }: PostData, file: Express.Multer.File | un
   })
 }
 
-export const editPost = async (postId: number, { content }: PostData, file: Express.Multer.File | undefined) => {
+export const editPost = async (postId: number, data: PostData, file: Express.Multer.File | undefined) => {
+  const { content } = data
+
   const post = await getPost(postId)
 
   const updatedPost = await prisma.post.update({
@@ -87,7 +91,7 @@ export const deletePostMedia = async (postId: number) => {
     throw new createError.NotFound("Cette publication ne contient pas d'image")
   }
 
-  await prisma.post.update({
+  const updatedPost = await prisma.post.update({
     where: {
       id: postId
     },
@@ -97,6 +101,8 @@ export const deletePostMedia = async (postId: number) => {
   })
 
   await unlink(`public/${post.media}`)
+
+  return updatedPost
 }
 
 export const deletePost = async (postId: number) => {
@@ -111,4 +117,6 @@ export const deletePost = async (postId: number) => {
   if (post.media) {
     await unlink(`public/${post.media}`)
   }
+
+  return post
 }

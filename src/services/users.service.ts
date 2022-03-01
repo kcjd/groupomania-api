@@ -31,11 +31,9 @@ export const getUsers = () => {
   })
 }
 
-export const editProfile = async (
-  userId: number,
-  { lastname, firstname, position }: ProfileData,
-  file: Express.Multer.File | undefined
-) => {
+export const editProfile = async (userId: number, data: ProfileData, file: Express.Multer.File | undefined) => {
+  const { lastname, firstname, position } = data
+
   const user = await getUser(userId)
 
   const updatedUser = await prisma.user.update({
@@ -57,7 +55,9 @@ export const editProfile = async (
   return updatedUser
 }
 
-export const editPassword = async (userId: number, { password, newPassword }: PasswordData) => {
+export const editPassword = async (userId: number, data: PasswordData) => {
+  const { password, newPassword } = data
+
   const user = await getUser(userId)
 
   await verifyPassword(password, user.password)
@@ -81,7 +81,7 @@ export const deleteUserPicture = async (userId: number) => {
     throw new createError.NotFound('Cet utilisateur ne possède pas de photo de profil')
   }
 
-  await prisma.user.update({
+  const updatedUser = await prisma.user.update({
     where: {
       id: userId
     },
@@ -91,6 +91,8 @@ export const deleteUserPicture = async (userId: number) => {
   })
 
   await unlink(`public/${user.picture}`)
+
+  return updatedUser
 }
 
 export const deleteUser = async (userId: number) => {
@@ -105,4 +107,6 @@ export const deleteUser = async (userId: number) => {
   if (user.picture) {
     await unlink(`public/${user.picture}`)
   }
+
+  return user
 }

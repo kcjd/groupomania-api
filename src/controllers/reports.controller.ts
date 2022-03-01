@@ -9,7 +9,7 @@ export const reportPost = async (req: Request, res: Response, next: NextFunction
   try {
     const report = await reportsService.reportPost(Number(postId), user.id)
 
-    res.status(201).json(report)
+    res.status(201).json({ message: 'Publication signalée', report })
   } catch (err) {
     next(err)
   }

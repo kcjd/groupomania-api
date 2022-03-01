@@ -11,7 +11,7 @@ export const addComment = async (req: Request, res: Response, next: NextFunction
   try {
     const comment = await commentsService.createComment(data, Number(postId), user.id)
 
-    res.status(201).json(comment)
+    res.status(201).json({ message: 'Commentaire envoyé', comment })
   } catch (err) {
     next(err)
   }
@@ -24,7 +24,7 @@ export const editComment = async (req: Request, res: Response, next: NextFunctio
   try {
     const comment = await commentsService.editComment(Number(commentId), data)
 
-    res.status(200).json(comment)
+    res.status(200).json({ message: 'Commentaire modifié', comment })
   } catch (err) {
     next(err)
   }
@@ -34,9 +34,9 @@ export const hideComment = async (req: Request, res: Response, next: NextFunctio
   const { commentId } = req.params
 
   try {
-    await commentsService.hideComment(Number(commentId))
+    const comment = await commentsService.hideComment(Number(commentId))
 
-    res.status(200).json('Commentaire masqué')
+    res.status(200).json({ message: 'Commentaire masqué', comment })
   } catch (err) {
     next(err)
   }
@@ -46,9 +46,9 @@ export const deleteComment = async (req: Request, res: Response, next: NextFunct
   const { commentId } = req.params
 
   try {
-    await commentsService.deleteComment(Number(commentId))
+    const comment = await commentsService.deleteComment(Number(commentId))
 
-    res.status(200).json('Commentaire supprimé')
+    res.status(200).json({ message: 'Commentaire supprimé', comment })
   } catch (err) {
     next(err)
   }

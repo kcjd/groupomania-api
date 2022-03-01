@@ -9,7 +9,7 @@ export const signup = async (req: Request, res: Response, next: NextFunction) =>
   try {
     const credentials = await authService.signup(data)
 
-    res.status(200).json(credentials)
+    res.status(200).json({ message: 'Inscription réussie', ...credentials })
   } catch (err) {
     next(err)
   }
@@ -21,7 +21,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
   try {
     const credentials = await authService.login(data)
 
-    res.status(200).json(credentials)
+    res.status(200).json({ message: 'Connexion réussie', ...credentials })
   } catch (err) {
     next(err)
   }

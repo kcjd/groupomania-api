@@ -20,7 +20,9 @@ export const getComment = async (commentId: number) => {
   return comment
 }
 
-export const createComment = ({ content }: CommentData, postId: number, authorId: number) => {
+export const createComment = (data: CommentData, postId: number, authorId: number) => {
+  const { content } = data
+
   return prisma.comment.create({
     data: {
       content,
@@ -30,7 +32,9 @@ export const createComment = ({ content }: CommentData, postId: number, authorId
   })
 }
 
-export const editComment = async (commentId: number, { content }: CommentData) => {
+export const editComment = async (commentId: number, data: CommentData) => {
+  const { content } = data
+
   await getComment(commentId)
 
   return prisma.comment.update({

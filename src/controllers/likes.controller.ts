@@ -9,7 +9,7 @@ export const likePost = async (req: Request, res: Response, next: NextFunction) 
   try {
     const like = await likesService.likePost(Number(postId), user.id)
 
-    res.status(201).json(like)
+    res.status(201).json({ message: 'Like enregistré', like })
   } catch (err) {
     next(err)
   }
@@ -20,9 +20,9 @@ export const unlikePost = async (req: Request, res: Response, next: NextFunction
   const { postId } = req.params
 
   try {
-    const unlike = await likesService.unlikePost(Number(postId), user.id)
+    const like = await likesService.unlikePost(Number(postId), user.id)
 
-    res.status(200).json(unlike)
+    res.status(200).json({ message: 'Like annulé', like })
   } catch (err) {
     next(err)
   }

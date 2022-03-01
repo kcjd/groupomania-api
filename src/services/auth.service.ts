@@ -8,7 +8,9 @@ import { LoginData, SignupData } from '../utils/validation'
 
 const prisma = new PrismaClient()
 
-export const signup = async ({ lastname, firstname, email, password }: SignupData) => {
+export const signup = async (data: SignupData) => {
+  const { lastname, firstname, email, password } = data
+
   const existingUser = await prisma.user.findUnique({
     where: {
       email
@@ -35,7 +37,9 @@ export const signup = async ({ lastname, firstname, email, password }: SignupDat
   return { user, accessToken }
 }
 
-export const login = async ({ email, password }: LoginData) => {
+export const login = async (data: LoginData) => {
+  const { email, password } = data
+
   const user = await prisma.user.findUnique({
     where: {
       email

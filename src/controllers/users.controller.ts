@@ -7,7 +7,7 @@ export const getUsers = async (req: Request, res: Response, next: NextFunction) 
   try {
     const users = await usersService.getUsers()
 
-    res.status(200).json(users)
+    res.status(200).json({ message: '', users })
   } catch (err) {
     next(err)
   }
@@ -21,7 +21,7 @@ export const editProfile = async (req: Request, res: Response, next: NextFunctio
   try {
     const user = await usersService.editProfile(Number(userId), data, file)
 
-    res.status(200).json(user)
+    res.status(200).json({ message: 'Profil mis à jour', user })
   } catch (err) {
     next(err)
   }
@@ -32,9 +32,9 @@ export const editPassword = async (req: Request, res: Response, next: NextFuncti
   const data: PasswordData = req.body
 
   try {
-    await usersService.editPassword(Number(userId), data)
+    const user = await usersService.editPassword(Number(userId), data)
 
-    res.status(200).json('Mot de passe modifié')
+    res.status(200).json({ message: 'Mot de passe modifié', user })
   } catch (err) {
     next(err)
   }
@@ -44,9 +44,9 @@ export const deleteUserPicture = async (req: Request, res: Response, next: NextF
   const { userId } = req.params
 
   try {
-    await usersService.deleteUserPicture(Number(userId))
+    const user = await usersService.deleteUserPicture(Number(userId))
 
-    res.status(200).json('Photo de profil supprimée')
+    res.status(200).json({ message: 'Photo de profil supprimée', user })
   } catch (err) {
     next(err)
   }
@@ -56,9 +56,9 @@ export const deleteUser = async (req: Request, res: Response, next: NextFunction
   const userId = req.params.userId
 
   try {
-    await usersService.deleteUser(Number(userId))
+    const user = await usersService.deleteUser(Number(userId))
 
-    res.status(200).json('Utilisateur supprimé')
+    res.status(200).json({ message: 'Compte supprimé', user })
   } catch (err) {
     next(err)
   }
