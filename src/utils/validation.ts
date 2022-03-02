@@ -12,10 +12,10 @@ yup.setLocale({
 })
 
 export const signupSchema = yup.object({
-  lastname: yup.string().trim().min(2).max(50).required(),
-  firstname: yup.string().trim().min(2).max(50).required(),
-  password: yup.string().min(8).max(25).required(),
-  email: yup.string().email().required()
+  lastname: yup.string().max(30).required(),
+  firstname: yup.string().max(30).required(),
+  email: yup.string().email().max(255).required(),
+  password: yup.string().min(8).max(20).required()
 })
 
 export const loginSchema = yup.object({
@@ -32,14 +32,14 @@ export const commentSchema = yup.object({
 })
 
 export const userSchema = yup.object({
-  lastname: yup.string().trim().min(2).max(50),
-  firstname: yup.string().trim().min(2).max(50),
-  position: yup.string().trim().min(2).max(50)
+  lastname: yup.string().max(30),
+  firstname: yup.string().max(30),
+  position: yup.string().max(30)
 })
 
 export const passwordSchema = yup.object({
   password: yup.string().required(),
-  newPassword: yup.string().min(8).max(25).required()
+  newPassword: yup.string().min(8).max(20).required()
 })
 
 export interface SignupData extends yup.InferType<typeof signupSchema> {}

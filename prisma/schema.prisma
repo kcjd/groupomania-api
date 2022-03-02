@@ -12,7 +12,7 @@ datasource db {
 
 model User {
   id        Int       @id @default(autoincrement())
-  email     String    @unique
+  email     String    @unique @db.VarChar(255)
   password  String
   lastname  String
   firstname String
@@ -30,7 +30,7 @@ model User {
 model Post {
   id        Int       @id @default(autoincrement())
   createdAt DateTime  @default(now())
-  content   String
+  content   String    @db.VarChar(255)
   media     String?
   published Boolean   @default(true)
   author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
@@ -43,7 +43,7 @@ model Post {
 model Comment {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
-  content   String
+  content   String   @db.VarChar(255)
   published Boolean  @default(true)
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  Int

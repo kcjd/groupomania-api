@@ -1,7 +1,7 @@
 -- CreateTable
 CREATE TABLE `User` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `email` VARCHAR(191) NOT NULL,
+    `email` VARCHAR(255) NOT NULL,
     `password` VARCHAR(191) NOT NULL,
     `lastname` VARCHAR(191) NOT NULL,
     `firstname` VARCHAR(191) NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE `User` (
 CREATE TABLE `Post` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `content` VARCHAR(191) NOT NULL,
+    `content` VARCHAR(255) NOT NULL,
     `media` VARCHAR(191) NULL,
     `published` BOOLEAN NOT NULL DEFAULT true,
     `authorId` INTEGER NOT NULL,
@@ -29,7 +29,7 @@ CREATE TABLE `Post` (
 CREATE TABLE `Comment` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `content` VARCHAR(191) NOT NULL,
+    `content` VARCHAR(255) NOT NULL,
     `published` BOOLEAN NOT NULL DEFAULT true,
     `authorId` INTEGER NOT NULL,
     `postId` INTEGER NOT NULL,
