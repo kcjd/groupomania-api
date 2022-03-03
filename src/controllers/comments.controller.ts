@@ -18,11 +18,12 @@ export const addComment = async (req: Request, res: Response, next: NextFunction
 }
 
 export const editComment = async (req: Request, res: Response, next: NextFunction) => {
+  const { user } = req
   const { commentId } = req.params
   const data: CommentData = req.body
 
   try {
-    const comment = await commentsService.editComment(Number(commentId), data)
+    const comment = await commentsService.editComment(Number(commentId), data, user.id)
 
     res.status(200).json({ message: 'Commentaire modifié', comment })
   } catch (err) {
@@ -43,10 +44,11 @@ export const hideComment = async (req: Request, res: Response, next: NextFunctio
 }
 
 export const deleteComment = async (req: Request, res: Response, next: NextFunction) => {
+  const { user } = req
   const { commentId } = req.params
 
   try {
-    const comment = await commentsService.deleteComment(Number(commentId))
+    const comment = await commentsService.deleteComment(Number(commentId), user.id)
 
     res.status(200).json({ message: 'Commentaire supprimé', comment })
   } catch (err) {

@@ -10,5 +10,5 @@ export default (role: Role) => (req: Request, res: Response, next: NextFunction)
     return next()
   }
 
-  next(new createError.Forbidden("Vous n'avez pas les droits nécessaires"))
+  next(new createError.Forbidden('Autorisation requise'))
 }

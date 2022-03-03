@@ -6,7 +6,7 @@ import { CommentData } from '../utils/validation'
 
 const prisma = new PrismaClient()
 
-export const getComment = async (commentId: number) => {
+const getComment = async (commentId: number, userId: number) => {
   const comment = await prisma.comment.findUnique({
     where: {
       id: commentId
@@ -15,6 +15,10 @@ export const getComment = async (commentId: number) => {
 
   if (!comment) {
     throw new createError.NotFound("Ce commentaire n'existe pas")
+  }
+
+  if (comment.authorId !== userId) {
+    throw new createError.Forbidden('Autorisation requise')
   }
 
   return comment
@@ -32,10 +36,10 @@ export const createComment = (data: CommentData, postId: number, authorId: numbe
   })
 }
 
-export const editComment = async (commentId: number, data: CommentData) => {
+export const editComment = async (commentId: number, data: CommentData, userId: number) => {
   const { content } = data
 
-  await getComment(commentId)
+  await getComment(commentId, userId)
 
   return prisma.comment.update({
     where: {
@@ -58,8 +62,8 @@ export const hideComment = (commentId: number) => {
   })
 }
 
-export const deleteComment = async (commentId: number) => {
-  await getComment(commentId)
+export const deleteComment = async (commentId: number, userId: number) => {
+  await getComment(commentId, userId)
 
   return prisma.comment.delete({
     where: {

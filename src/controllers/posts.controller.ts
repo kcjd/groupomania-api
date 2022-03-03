@@ -28,12 +28,13 @@ export const addPost = async (req: Request, res: Response, next: NextFunction) =
 }
 
 export const editPost = async (req: Request, res: Response, next: NextFunction) => {
+  const { user } = req
   const { postId } = req.params
   const data: PostData = req.body
   const file = req.file
 
   try {
-    const post = await postsService.editPost(Number(postId), data, file)
+    const post = await postsService.editPost(Number(postId), data, file, user.id)
 
     res.status(200).json({ message: 'Publication modifiée', post })
   } catch (err) {
@@ -54,10 +55,11 @@ export const hidePost = async (req: Request, res: Response, next: NextFunction) 
 }
 
 export const deletePostMedia = async (req: Request, res: Response, next: NextFunction) => {
+  const { user } = req
   const { postId } = req.params
 
   try {
-    const post = await postsService.deletePostMedia(Number(postId))
+    const post = await postsService.deletePostMedia(Number(postId), user.id)
 
     res.status(200).json({ message: 'Image supprimée', post })
   } catch (err) {
@@ -66,10 +68,11 @@ export const deletePostMedia = async (req: Request, res: Response, next: NextFun
 }
 
 export const deletePost = async (req: Request, res: Response, next: NextFunction) => {
+  const { user } = req
   const { postId } = req.params
 
   try {
-    const post = await postsService.deletePost(Number(postId))
+    const post = await postsService.deletePost(Number(postId), user.id)
 
     res.status(200).json({ message: 'Publication supprimée', post })
   } catch (err) {

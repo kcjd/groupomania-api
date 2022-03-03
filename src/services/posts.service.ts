@@ -8,7 +8,7 @@ import { PostData } from '../utils/validation'
 
 const prisma = new PrismaClient()
 
-const getPost = async (postId: number) => {
+const getPost = async (postId: number, userId: number) => {
   const post = await prisma.post.findUnique({
     where: {
       id: postId
@@ -17,6 +17,10 @@ const getPost = async (postId: number) => {
 
   if (!post) {
     throw new createError.NotFound("Cette publication n'existe pas")
+  }
+
+  if (post.authorId !== userId) {
+    throw new createError.Forbidden('Autorisation requise')
   }
 
   return post
@@ -51,10 +55,15 @@ export const createPost = (data: PostData, file: Express.Multer.File | undefined
   })
 }
 
-export const editPost = async (postId: number, data: PostData, file: Express.Multer.File | undefined) => {
+export const editPost = async (
+  postId: number,
+  data: PostData,
+  file: Express.Multer.File | undefined,
+  userId: number
+) => {
   const { content } = data
 
-  const post = await getPost(postId)
+  const post = await getPost(postId, userId)
 
   const updatedPost = await prisma.post.update({
     where: {
@@ -84,8 +93,8 @@ export const hidePost = (postId: number) => {
   })
 }
 
-export const deletePostMedia = async (postId: number) => {
-  const post = await getPost(postId)
+export const deletePostMedia = async (postId: number, userId: number) => {
+  const post = await getPost(postId, userId)
 
   if (!post.media) {
     throw new createError.NotFound("Cette publication ne contient pas d'image")
@@ -105,10 +114,10 @@ export const deletePostMedia = async (postId: number) => {
   return updatedPost
 }
 
-export const deletePost = async (postId: number) => {
-  const post = await getPost(postId)
+export const deletePost = async (postId: number, userId: number) => {
+  const post = await getPost(postId, userId)
 
-  await prisma.post.delete({
+  const deletedPost = await prisma.post.delete({
     where: {
       id: postId
     }
@@ -118,5 +127,5 @@ export const deletePost = async (postId: number) => {
     await unlink(`public/${post.media}`)
   }
 
-  return post
+  return deletedPost
 }
