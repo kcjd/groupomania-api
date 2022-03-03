@@ -42,9 +42,9 @@ export const passwordSchema = yup.object({
   newPassword: yup.string().min(8).max(20).required()
 })
 
-export interface SignupData extends yup.InferType<typeof signupSchema> {}
-export interface LoginData extends yup.InferType<typeof loginSchema> {}
-export interface PostData extends yup.InferType<typeof postSchema> {}
-export interface CommentData extends yup.InferType<typeof commentSchema> {}
-export interface ProfileData extends yup.InferType<typeof userSchema> {}
-export interface PasswordData extends yup.InferType<typeof passwordSchema> {}
+export type SignupData = yup.InferType<typeof signupSchema>
+export type LoginData = yup.InferType<typeof loginSchema>
+export type PostData = yup.InferType<typeof postSchema>
+export type CommentData = yup.InferType<typeof commentSchema>
+export type ProfileData = yup.InferType<typeof userSchema>
+export type PasswordData = yup.InferType<typeof passwordSchema>

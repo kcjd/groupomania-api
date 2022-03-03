@@ -4,6 +4,7 @@ import createError from 'http-errors'
 
 import { PrismaClient } from '@prisma/client'
 
+import { checkUserId } from '../utils/helpers'
 import { PostData } from '../utils/validation'
 
 const prisma = new PrismaClient()
@@ -19,9 +20,7 @@ const getPost = async (postId: number, userId: number) => {
     throw new createError.NotFound("Cette publication n'existe pas")
   }
 
-  if (post.authorId !== userId) {
-    throw new createError.Forbidden('Autorisation requise')
-  }
+  checkUserId(post.authorId, userId)
 
   return post
 }

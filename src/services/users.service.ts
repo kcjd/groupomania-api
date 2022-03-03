@@ -4,6 +4,7 @@ import createError from 'http-errors'
 
 import { PrismaClient } from '@prisma/client'
 
+import { checkUserId, getUserWithoutPassword } from '../utils/helpers'
 import { hashPassword, verifyPassword } from '../utils/password'
 import { PasswordData, ProfileData } from '../utils/validation'
 
@@ -20,19 +21,19 @@ const getUser = async (userId: number, authUserId: number) => {
     throw new createError.NotFound("Cet utilisateur n'existe pas")
   }
 
-  if (user.id !== authUserId) {
-    throw new createError.Forbidden('Autorisation requise')
-  }
+  checkUserId(userId, authUserId)
 
   return user
 }
 
-export const getUsers = () => {
-  return prisma.user.findMany({
+export const getUsers = async () => {
+  const users = await prisma.user.findMany({
     include: {
       following: true
     }
   })
+
+  return users.map((user) => getUserWithoutPassword(user))
 }
 
 export const editProfile = async (
@@ -61,7 +62,7 @@ export const editProfile = async (
     await unlink(`public/${user.picture}`)
   }
 
-  return updatedUser
+  return getUserWithoutPassword(updatedUser)
 }
 
 export const editPassword = async (userId: number, data: PasswordData, authUserId: number) => {
@@ -73,7 +74,7 @@ export const editPassword = async (userId: number, data: PasswordData, authUserI
 
   const hashedPassword = await hashPassword(newPassword)
 
-  return prisma.user.update({
+  const updatedUser = await prisma.user.update({
     where: {
       id: userId
     },
@@ -81,6 +82,8 @@ export const editPassword = async (userId: number, data: PasswordData, authUserI
       password: hashedPassword
     }
   })
+
+  return getUserWithoutPassword(updatedUser)
 }
 
 export const deleteUserPicture = async (userId: number, authUserId: number) => {
@@ -101,7 +104,7 @@ export const deleteUserPicture = async (userId: number, authUserId: number) => {
 
   await unlink(`public/${user.picture}`)
 
-  return updatedUser
+  return getUserWithoutPassword(updatedUser)
 }
 
 export const deleteUser = async (userId: number, authUserId: number) => {
@@ -117,5 +120,5 @@ export const deleteUser = async (userId: number, authUserId: number) => {
     await unlink(`public/${user.picture}`)
   }
 
-  return deletedUser
+  return getUserWithoutPassword(deletedUser)
 }

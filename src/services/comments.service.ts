@@ -2,6 +2,7 @@ import createError from 'http-errors'
 
 import { PrismaClient } from '@prisma/client'
 
+import { checkUserId } from '../utils/helpers'
 import { CommentData } from '../utils/validation'
 
 const prisma = new PrismaClient()
@@ -17,9 +18,7 @@ const getComment = async (commentId: number, userId: number) => {
     throw new createError.NotFound("Ce commentaire n'existe pas")
   }
 
-  if (comment.authorId !== userId) {
-    throw new createError.Forbidden('Autorisation requise')
-  }
+  checkUserId(comment.authorId, userId)
 
   return comment
 }

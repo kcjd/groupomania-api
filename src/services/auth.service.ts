@@ -2,6 +2,7 @@ import createError from 'http-errors'
 
 import { PrismaClient } from '@prisma/client'
 
+import { getUserWithoutPassword } from '../utils/helpers'
 import { hashPassword, verifyPassword } from '../utils/password'
 import { createToken } from '../utils/token'
 import { LoginData, SignupData } from '../utils/validation'
@@ -34,7 +35,7 @@ export const signup = async (data: SignupData) => {
 
   const accessToken = createToken(user)
 
-  return { user, accessToken }
+  return { user: getUserWithoutPassword(user), accessToken }
 }
 
 export const login = async (data: LoginData) => {
@@ -54,5 +55,5 @@ export const login = async (data: LoginData) => {
 
   const accessToken = createToken(user)
 
-  return { user, accessToken }
+  return { user: getUserWithoutPassword(user), accessToken }
 }
