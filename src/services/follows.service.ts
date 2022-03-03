@@ -22,6 +22,11 @@ export const followUser = async (followerId: number, followingId: number) => {
     data: {
       followerId,
       followingId
+    },
+    select: {
+      followerId: true,
+      followingId: true,
+      following: true
     }
   })
 }
@@ -46,6 +51,11 @@ export const unfollowUser = async (followerId: number, followingId: number) => {
         followerId,
         followingId
       }
+    },
+    select: {
+      followerId: true,
+      followingId: true,
+      following: true
     }
   })
 }

@@ -7,9 +7,9 @@ export const followUser = async (req: Request, res: Response, next: NextFunction
   const { userId } = req.params
 
   try {
-    const follow = await followsService.followUser(user.id, Number(userId))
+    const { following, ...follow } = await followsService.followUser(user.id, Number(userId))
 
-    res.status(201).json({ message: 'Abonnement enregistré', follow })
+    res.status(201).json({ message: `Vous êtes abonné à ${following.firstname}`, follow })
   } catch (err) {
     next(err)
   }
@@ -20,9 +20,9 @@ export const unfollowUser = async (req: Request, res: Response, next: NextFuncti
   const { userId } = req.params
 
   try {
-    const follow = await followsService.unfollowUser(user.id, Number(userId))
+    const { following, ...follow } = await followsService.unfollowUser(user.id, Number(userId))
 
-    res.status(200).json({ message: 'Abonnement annulé', follow })
+    res.status(200).json({ message: `Vous n'êtes plus abonné à ${following.firstname}`, follow })
   } catch (err) {
     next(err)
   }
