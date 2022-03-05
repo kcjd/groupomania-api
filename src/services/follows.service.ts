@@ -5,6 +5,10 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 export const followUser = async (followerId: number, followingId: number) => {
+  if (followerId === followingId) {
+    throw new createError.BadRequest('Vous ne pouvez pas vous abonner à vous-même')
+  }
+
   const existingFollow = await prisma.follow.findUnique({
     where: {
       followerId_followingId: {
@@ -15,7 +19,7 @@ export const followUser = async (followerId: number, followingId: number) => {
   })
 
   if (existingFollow) {
-    throw new createError.BadRequest('Vous suivez déjà cet utilisateur')
+    throw new createError.BadRequest('Vous êtes déjà abonné à cet utilisateur')
   }
 
   return prisma.follow.create({
@@ -42,7 +46,7 @@ export const unfollowUser = async (followerId: number, followingId: number) => {
   })
 
   if (!existingFollow) {
-    throw new createError.NotFound('Vous ne suivez pas cet utilisateur')
+    throw new createError.NotFound("Vous n'êtes pas abonné à cet utilisateur")
   }
 
   return prisma.follow.delete({
