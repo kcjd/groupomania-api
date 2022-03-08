@@ -48,7 +48,7 @@ export const login = async (data: LoginData) => {
   })
 
   if (!user) {
-    throw new createError.Unauthorized("Cet utilisateur n'existe pas")
+    throw new createError.Unauthorized('Email incorrect')
   }
 
   await verifyPassword(password, user.password)

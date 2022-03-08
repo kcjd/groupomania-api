@@ -10,7 +10,7 @@ export const signup = async (req: Request, res: Response, next: NextFunction) =>
     const credentials = await authService.signup(data)
 
     res.status(200).json({
-      message: `Compte créé: ${credentials.user.email}`,
+      message: 'Inscription réussie',
       ...credentials
     })
   } catch (err) {
@@ -25,7 +25,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     const credentials = await authService.login(data)
 
     res.status(200).json({
-      message: `Connecté : ${credentials.user.email}`,
+      message: 'Connexion réussie',
       ...credentials
     })
   } catch (err) {
