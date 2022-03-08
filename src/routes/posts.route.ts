@@ -14,8 +14,8 @@ import reportsRoute from './reports.route'
 const router = Router()
 
 router.get('/', getPosts)
-router.post('/', upload('posts').single('media'), validate(postSchema), addPost)
-router.patch('/:postId', upload('posts').single('media'), validate(postSchema), editPost)
+router.post('/', upload('posts'), validate(postSchema), addPost)
+router.patch('/:postId', upload('posts'), validate(postSchema), editPost)
 router.delete('/:postId/media', deletePostMedia)
 router.delete('/:postId', deletePost)
 

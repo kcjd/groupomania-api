@@ -11,7 +11,7 @@ import followsRoute from './follows.route'
 const router = Router()
 
 router.get('/', getUsers)
-router.patch('/:userId', upload('users').single('picture'), validate(userSchema), editProfile)
+router.patch('/:userId', upload('users'), validate(userSchema), editProfile)
 router.patch('/:userId/password', validate(passwordSchema), editPassword)
 router.delete('/:userId/picture', deleteUserPicture)
 router.delete('/:userId', deleteUser)
